@@ -1,6 +1,6 @@
 import RssFetcher from './rssFetcher.js';
 
-const proxyServerUrl = 'https://squid-app-i75i8.ondigitalocean.app/';
+const proxyServerUrl = 'plankton-app-gqyh3.ondigitalocean.app';
 const myRssFetcher = new RssFetcher(proxyServerUrl, DOMParser);
 // Create an instance of RssFetcher
 const rssFetcher = new RssFetcher();

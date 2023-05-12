@@ -57,8 +57,14 @@ app.use('/', createProxyMiddleware({
         res.status(500).send('Internal Server Error');
     },
     pathRewrite: (path, req) => {
-        return new URL(req.query.url).pathname;
-    },
+  const targetUrl = req.query.url;
+  if (!targetUrl) {
+    return path;
+  }
+  const url = new URL(targetUrl);
+  return url.pathname;
+},
+
 }));
 
 app.listen(port, () => {

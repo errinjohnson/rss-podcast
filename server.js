@@ -41,7 +41,7 @@ app.use('/', createProxyMiddleware({
         if (setCookie) {
             const cookies = Array.isArray(setCookie) ? setCookie : [setCookie];
             cookies.forEach((cookie) => {
-                res.setHeader('Set-Cookie', cookie + '; domain=.herokuapp.com; HttpOnly; Secure; SameSite=None');
+                res.setHeader('Set-Cookie', cookie + '; domain=digitalocean.com; HttpOnly; Secure; SameSite=None');
             });
         }
     },

@@ -52,15 +52,16 @@ app.use('/', createProxyMiddleware({
         }
         return targetUrl;
     },
-    onError: (err, req, res) => {
-        if (err && err.status) {
-            console.error('Error in proxy middleware:', err);
-            res.status(500).send('Internal Server Error');
-        } else {
-            console.error('Unknown error in proxy middleware:', err);
-            res.status(500).send('Unknown Error');
-        }
-    },
+  onError: (err, req, res) => {
+  if (err && err.status) {
+    console.error('Error in proxy middleware:', err);
+    res.status(err.status).send('Internal Server Error');
+  } else {
+    console.error('Unknown error in proxy middleware:', err);
+    res.status(500).send('Unknown Error');
+  }
+},
+
 
     pathRewrite: (path, req) => {
   const targetUrl = req.query.url;

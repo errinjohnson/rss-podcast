@@ -244,7 +244,7 @@ podcastSearchButton.addEventListener('click', async (e) => {
 async function searchPodcasts(searchTerm) {
   const term = encodeURIComponent(searchTerm); // URL-encode the search term
   const country = 'US'; // Specify the country code, e.g., 'US' for the United States
-  const proxyUrl = 'https://nameless-reaches-08658.herokuapp.com/';
+  const proxyUrl = 'https://squid-app-i75i8.ondigitalocean.app/';
 
   const itunesUrl = `https://itunes.apple.com/search?term=${term}&country=${country}`;
   const url = `${proxyUrl}?url=${encodeURIComponent(itunesUrl)}`;

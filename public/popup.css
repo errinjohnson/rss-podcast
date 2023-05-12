@@ -1,0 +1,184 @@
+/* Define the font-family for the Newsreader font */
+@font-face {
+    font-family: 'Newsreader ExtraLight';
+    src: url('static/Newsreader_14pt/Newsreader_14pt-ExtraLight.woff2') format('woff2'),
+        url('static/Newsreader_14pt/Newsreader_14pt-ExtraLight.woff') format('woff'),
+        url('static/Newsreader_14pt/Newsreader_14pt-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+/* Define the styles for the navbar */
+.navbar-custom {
+    /* Set the background color and add a box shadow */
+    background-color: transparent;
+    color: #555;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.914);
+}
+
+.navbar-custom a {
+    /* Set the link color, font size, and weight */
+    color: #555;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Define the styles for the dropdown menu */
+.navbar-custom .dropdown-menu {
+    background-color: #007bff;
+}
+
+.navbar-custom .dropdown-item {
+    /* Set the color for the dropdown items */
+    color: #fff;
+}
+
+.navbar-custom .dropdown-item:hover {
+    /* Set the background color for the dropdown items on hover */
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 767px) {
+    .navbar-custom .navbar-toggler {
+        /* Set the background color for the navbar toggler on small screens */
+        background-color: whitesmoke;
+    }
+
+    .navbar-custom .navbar-toggler-icon {
+        /* Set the color for the navbar toggler icon on small screens */
+        color: #007bff;
+    }
+}
+.url-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.url-source-name {
+    flex-grow: 1;
+}
+
+.url-remove-button {
+    margin-left: 10px;
+}
+
+
+/* Define the styles for the container */
+.container {
+    /* Set the font family for the container */
+    font-family: 'Newsreader';
+    /* Set the position to relative and hide any overflow */
+    position: relative;
+    overflow: hidden;
+}
+
+.container::before {
+    /* Add a background image to the container before the content */
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url(img/news-1074604__480.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* Set the z-index to -1 to place the pseudo-element behind the content */
+    z-index: -1;
+    /* Add a box shadow to the container */
+    box-shadow: inset 0 0 50px 10px rgba(0, 0, 0, 0.5);
+}
+
+.no-bullets {
+    /* Remove the bullets for the list */
+    list-style-type: none;
+}
+/* #url-list {
+    min-height: 50px;
+     color: whitesmoke;
+    background-color: rgba(16, 77, 220, 0.8)
+} */
+#url-list-container {
+    display: flexbox;
+    min-height: 50px;
+    font-size: .7em;
+    color: whitesmoke;
+    background-color: rgba(16, 77, 220, 0.4);
+    box-shadow: 20px 20px 20px rgba(159, 186, 156, 0.4);
+     border-radius: 5px;
+} 
+#url-list-container li button {
+    align-content: flex-end;
+}
+.btn-primary {
+    /* Set some basic styles for input fields */
+    margin: 10px;
+    text-align: center;
+    background-color: rgba(159, 186, 156, 0.8);
+    box-shadow: 20px 20px 20px rgba(16, 77, 220, 0.4);
+    border-radius: 5px;
+    color: #555;
+}
+
+#instructions {
+    color: whitesmoke;
+    background-color: rgba(16, 77, 220, 0.8)
+}
+
+.nav-link {
+    width: 200px;
+}
+
+.navbar-toggler-icon {
+    background-color: #fff;
+}
+
+.nav-link,
+.news-container h2 {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #555;
+    font-weight: 900;
+    background-color: rgba(159, 186, 156, 0.8);
+    box-shadow: 20px 20px 20px rgba(16, 77, 220, 0.4);
+    border-radius: 5px;
+    border-width: 2.5px;
+    border-style: double;
+    border-color: whitesmoke;
+}
+
+header {
+    position: relative;
+}
+
+.news-container h2 {
+    text-align: center;
+}
+
+main {
+    position: relative;
+}
+
+/* News buttons styles */
+#news-buttons {
+    position: sticky;
+    top: 15px;;
+    min-height: 50px;
+    background-color: #aae1c9;
+    z-index: 1;
+    box-shadow: 0 0 10px rgba(85, 85, 85, 0.5);
+}
+#podcast-list {
+     background-color: rgba(159, 186, 156, 0.8);
+     box-shadow: 20px 20px 20px rgba(16, 77, 220, 0.4);
+}
+.container {
+    /* set a max-height to create a scrolling area */
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* In this example,
+the #news-buttons element has a fixed height of 50px,
+and the container element has a max-height of 500px with overflow-y: auto to create a scrolling area. You can adjust the height values to fit your specific design requirements. */

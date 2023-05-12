@@ -1,0 +1,23 @@
+{
+  "name": "nametheapp",
+  "version": "1.0.0",
+  "description": "RSS feed reader that fetches and displays news articles from various sources. It includes an RSS Fetcher class that is responsible for fetching the RSS feeds, a server file that serves static files and acts as a proxy to forward requests to the appropriate URLs, and an index file that makes use of the RssFetcher class to fetch and display the news articles. You have encountered a few errors related to CORS and missing headers, and have been working to resolve these issues",
+  "main": "./popup.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "node-fetch": "^3.3.1",
+    "xml2js": "^0.5.0"
+  },
+  "devDependencies": {
+    "prettier": "2.8.8"
+  }
+}

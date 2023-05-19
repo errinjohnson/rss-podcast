@@ -19,7 +19,6 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
-
 // Serve the popup.html file
 app.get('/public/popup.html', function (req, res) {
     res.sendFile(path.join(__dirname, 'public', 'popup.html'));
@@ -52,17 +51,17 @@ app.use('/', createProxyMiddleware({
         }
         return targetUrl;
     },
-  onError: (err, req, res) => {
+ onError: (err, req, res) => {
   if (err && err.status) {
     console.error('Error in proxy middleware:', err);
     res.status(err.status).send('Internal Server Error');
-  } else {
+  } else if (err) {
     console.error('Unknown error in proxy middleware:', err);
+    res.status(500).send('Unknown Error');
+  } else {
     res.status(500).send('Unknown Error');
   }
 },
-
-
     pathRewrite: (path, req) => {
   const targetUrl = req.query.url;
   if (!targetUrl) {

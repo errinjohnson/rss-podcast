@@ -55,48 +55,23 @@
             <div id="instructions" style="display: none;">
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-4">
-                            <p>Welcome to PulsePortal! This app allows you to read news from multiple sources in one
-                                place.
-                            </p>
-                            <p>To get started, add RSS feed URLs to the list on the left side of the screen. You can do
-                                this
-                                by
-                                typing in a URL in the input field and clicking the "Submit" button. You can also remove
-                                URLs
-                                from
-                                the list by clicking the "Remove" button next to each URL.</p>
+                         <div class="col-md-4">
+                            <p>Welcome to our RSS News Reader app! Here's how you can use it:</p>
+                            <p><strong>Step 1:</strong> Enter the URL of an RSS feed in the input field. For example, you might use a URL like 'https://example.com/rss'.</p>
+                            <p><strong>Step 2:</strong> Click on the 'Submit' button. Our app will check if the URL is valid and if it can successfully fetch data from it.</p>
+                            <p><strong>Note:</strong> If the URL is already in your list or if it's not valid, the app will show an error message.</p>
+                        </div>
+                            <div class="col-md-4">
+                            <p><strong>Step 3:</strong> If the URL is valid, the app will add it to your list of RSS feed URLs. You can see this list by clicking on the 'Toggle URL List' button.</p>
+                            <p><strong>Step 4:</strong> In the URL list, you can see the source name and the URL of each feed. You can also remove any feed from the list by clicking on the 'Remove' button next to it.</p>
+                            <p><strong>Step 5:</strong> Click on the 'Fetch News' button to fetch news data from all the URLs in your list. The app will be displayed your news within the aspp</p>
                         </div>
                         <div class="col-md-4">
-                            <p>Once you have added some URLs to the list, you can click the "Fetch All News" button to
-                                fetch
-                                the
-                                latest news articles from all the sources. You can then use the news buttons to filter
-                                the
-                                articles
-                                by source.</p>
-                            <p>You can use the Reset Local Storage option, if the app is dealing with an invalid link
-                                that
-                                got
-                                added
-                                to the list by accident; I am working on a better error handling solution</p>
-                        </div>
-                        <div class="col-md-4">
-                            The "Backup" modal feature allows you to manage a list of RSS feed URLs for backup purposes,
-                            in case
-                            you need to reset the news array. The list is saved in your browser's local storage for easy
-                            access. Here's how to use the modal feature:
-
-                            Open the modal by clicking the button or trigger element.
-                            Add URLs to the list by entering them in the text area, one per line, and clicking "Save".
-                            This saves the URLs, updates the list, and closes the modal.
-                            Reopen the modal to view the saved URLs.
-                            Remove a URL from the list by clicking the "Remove" button next to it. This also updates the
-                            local storage.
-
-                            Note that clearing the browser's local storage entirely will remove the saved list of URLs.
-                            However, resetting the local storage for the news array should not affect the saved list
-                            under 'localStorageB'.
+                         <p><strong>Step 6:</strong> If there's an error while fetching news data from a URL, the app will show an error message, and it will remove the URL from your list.</p>
+                        <p><strong>Step 7:</strong> Our app uses local storage to save your RSS feed URLs. You can reset this storage by clicking on the 'Reset Local Storage' button. Be careful as this will remove all your stored URLs.</p>
+                        <p><strong>Step 8:</strong> There's a 'Backup' button available (separate local storge not affected by a reset) LocalStorage that will open a modal. This modal will let y ou view ,  add  and remove your URLs. 
+                        <p><strong>Step 9:</strong> In the Backup modal, there's also an option to share your URLs via email. Simply enter your email, click on the 'Share via Email' button, and we'll send you an email with your URLs.</p>
+                        <p>That's it! Enjoy reading news from your favorite sources.</p>
                         </div>
                     </div>
                 </div>

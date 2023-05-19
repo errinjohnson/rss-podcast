@@ -1,7 +1,8 @@
 import RssFetcher from './rssFetcher.js';
 
-const proxyServerUrl = 'plankton-app-gqyh3.ondigitalocean.app';
+const proxyServerUrl = 'https://walrus-app-gebas.ondigitalocean.app/';
 const myRssFetcher = new RssFetcher(proxyServerUrl, DOMParser);
+
 // Create an instance of RssFetcher
 const rssFetcher = new RssFetcher();
 const rssSubmitButton = document.getElementById('rss-submit');
@@ -56,6 +57,19 @@ toggleUrlListButton.addEventListener('click', function() {
 
 function updateUrlList(newsFeed = {}) {
     const sourceName = newsFeed.sourceName ? newsFeed.sourceName : newsFeed.url;
+
+    // Check if a list item for this newsFeed already exists
+    const existingListItem = Array.from(urlListContainer.children).find(
+        (child) => child.querySelector('span').textContent === sourceName
+    );
+
+    if (existingListItem) {
+        // If it exists, don't create a new one
+        console.log("List item for this URL already exists");
+        return;
+    }
+
+    // If it doesn't exist, create a new list item
     const listItem = document.createElement('li');
     const sourceNameSpan = document.createElement('span');
     sourceNameSpan.textContent = sourceName;
@@ -80,6 +94,7 @@ function updateUrlList(newsFeed = {}) {
     listItem.appendChild(removeButton);
     urlListContainer.appendChild(listItem);
 }
+
 
 
 function handleFetchNewsError(feed, error) {

@@ -4,7 +4,7 @@ export default class RssFetcher {
         this.DOMParser = parser;
     }
 
-    async fetchWithTimeout(url, options, timeout = 10000) {
+    async fetchWithTimeout(url, options, timeout = 60000) {
         let start = Date.now();
 
         const controller = new AbortController();
@@ -35,7 +35,7 @@ export default class RssFetcher {
     }
 
     // Check if the URL ends with .rss, .xml, or has 'rss' or 'xml' as query parameters
-    const rssXmlRegex = /\.(rss|xml)$|\?.*(rss|xml)/i;
+    const rssXmlRegex = /\.(rss|xml|rss2)$|\?.*(rss|xml|rss2)/i;
     if (!rssXmlRegex.test(url)) {
         return false;
     }

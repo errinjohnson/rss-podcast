@@ -1,10 +1,10 @@
 {
   "name": "nametheapp",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "type": "module",
   "description": "RSS feed reader that fetches and displays news articles from various sources. It includes an RSS Fetcher class that is responsible for fetching the RSS feeds, a server file that serves static files and acts as a proxy to forward requests to the appropriate URLs, and an index file that makes use of the RssFetcher class to fetch and display the news articles. You have encountered a few errors related to CORS and missing headers, and have been working to resolve these issues",
   "main": "./index.js",
-  "type": "module",
-  "scripts": {
+    "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },

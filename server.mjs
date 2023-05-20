@@ -23,7 +23,7 @@ app.get('/', function (req, res) {
 });
 
 app.use('/', createProxyMiddleware({
-    target: 'http://localhost:3000', // default target
+    target: 'https://walrus-app-gebas.ondigitalocean.app/', // default target
     changeOrigin: true,
     logLevel: 'debug',
     onProxyReq(proxyReq, req, res) {
@@ -31,7 +31,17 @@ app.use('/', createProxyMiddleware({
     },
     router: (req) => {
         const targetUrl = req.query.url;
-        return targetUrl || null;
+        if (targetUrl) {
+            try {
+                new URL(targetUrl);
+                return targetUrl;
+            } catch (_) {
+                // not a valid URL
+                console.error(`Invalid URL provided: ${targetUrl}`);
+            }
+        }
+        // if no valid url is provided, fall back to the default target
+        return 'https://walrus-app-gebas.ondigitalocean.app/';
     },
     onError: (err, req, res) => {
         if (err && err.status) {

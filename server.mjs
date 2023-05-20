@@ -23,7 +23,7 @@ app.get('/', function (req, res) {
 });
 
 app.use('/', createProxyMiddleware({
-    target: 'https://walrus-app-gebas.ondigitalocean.app/', // default target
+    target: 'https://seahorse-app-ajw5j.ondigitalocean.app/', // default target
     changeOrigin: true,
     logLevel: 'debug',
     onProxyReq(proxyReq, req, res) {

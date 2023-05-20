@@ -102,13 +102,13 @@ function handleFetchNewsError(feed, error) {
 }
 
 function fetchAllNewsData() {
-    const rssFeedUrls = JSON.parse(localStorage.getItem('rssFeedUrls')) || [];
+  const rssFeedUrls = JSON.parse(localStorage.getItem('rssFeedUrls')) || [];
+  console.log("fetchAllNewsData: from rssFeedUrls",rssFeedUrls);
     if (rssFeedUrls.length > 0) {
         rssFeedUrls.forEach(feed => {
             myRssFetcher.fetchNewsData(feed.url) 
                 .then(newsData => {
-                    console.log('newsData:', newsData);
-                    return myRssFetcher.parseNewsData(newsData);
+                   return myRssFetcher.parseNewsData(newsData);
                 })
                 .then(parsedData => {
                     console.log('parsedData:', parsedData);
@@ -198,9 +198,10 @@ resetLocalStorage.addEventListener("click", function () {
   }
 });
 async function validateAndFetchNewsData(url) {
-    if (!url || typeof url !== "string" || !url.trim().length || !myRssFetcher.isValidRssOrXmlUrl(url)) {
+    if (!url){
         throw new Error('Invalid or empty "url" query parameter, or not an RSS/XML feed URL.');
-    }
+  }
+  console.log("myRssFetcher.fetchNewsData(url)",fetchNewsData(url) );
     return myRssFetcher.fetchNewsData(url);
 }
 

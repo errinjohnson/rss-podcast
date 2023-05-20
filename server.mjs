@@ -1,8 +1,13 @@
+import express from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import cors from 'cors';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+const app = express();  // Initialization of 'app'
 
 app.use(express.static(join(__dirname, 'public'), {
     setHeaders: (res, filePath) => {

@@ -9,12 +9,14 @@ const rssSubmitButton = document.getElementById('rss-submit');
 const rssInput = document.getElementById('rss-input');
 
 
-rssSubmitButton.addEventListener('click', function() {
-    const rssInputValue = rssInput.value;
+rssSubmitButton.addEventListener('click', function () {
+  const rssInputValue = rssInput.value;
+  if (rssInputValue == '')
+  {
+    return;
+  }
     const rssFeedUrls = JSON.parse(localStorage.getItem('rssFeedUrls')) || [];
-
     const existingFeed = rssFeedUrls.find(feed => feed.url === rssInputValue);
-
     if (existingFeed) {
         console.log("URL already exists");
         return;

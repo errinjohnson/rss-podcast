@@ -70,7 +70,7 @@ parseData(podcastData) {
 
     fetchNewsData(url) {
     if (!url || typeof url !== "string" || !url.trim().length) {
-        throw new Error('URL is missing or empty.');
+        return;
     }
     const proxiedUrl = `${this.proxyServerUrl}?url=${encodeURIComponent(url)}`;
     console.log('Fetching URL:', proxiedUrl);
@@ -85,15 +85,18 @@ parseData(podcastData) {
             return response.text();
         })
         .then(data => {
-            const parser = new DOMParser();
-            const xml = parser.parseFromString(data, 'application/xml');
-            const items = xml.querySelectorAll('item');
-            const sourceName = xml.querySelector('channel > title').textContent;
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(data, 'application/xml');
+    const items = xml.querySelectorAll('item');
+    const sourceName = xml.querySelector('channel > title').textContent;
+            const sourceDescription = xml.querySelector('channel > description').textContent;
             return {
-                items,
-                sourceName
-            };
-        });
+        items,
+        sourceName,
+        sourceDescription
+        };
+});
+
 }
 
 parseNewsData({

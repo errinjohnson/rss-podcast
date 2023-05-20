@@ -77,7 +77,7 @@ parseData(podcastData) {
 
     return this.fetchWithTimeout(proxiedUrl, {
         method: 'GET',
-    }, 10000)
+    }, 30000)
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`Request failed with status ${response.status}`);

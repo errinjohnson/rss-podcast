@@ -95,15 +95,12 @@ function updateUrlList(newsFeed = {}) {
     urlListContainer.appendChild(listItem);
 }
 
-
-
 function handleFetchNewsError(feed, error) {
     console.error(`Error fetching news data for URL: ${feed.url}. Error:`, error);
 }
 
 function fetchAllNewsData() {
     const rssFeedUrls = JSON.parse(localStorage.getItem('rssFeedUrls')) || [];
-
     if (rssFeedUrls.length > 0) {
         rssFeedUrls.forEach(feed => {
             myRssFetcher.fetchNewsData(feed.url) 

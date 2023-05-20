@@ -41,7 +41,7 @@ app.use('/', createProxyMiddleware({
             }
         }
         // if no valid url is provided, fall back to the default target
-        return 'https://walrus-app-gebas.ondigitalocean.app/';
+        return 'https://seahorse-app-ajw5j.ondigitalocean.app/';
     },
     onError: (err, req, res) => {
         if (err && err.status) {

@@ -1,15 +1,10 @@
-import express from 'express';
-import { createProxyMiddleware } from 'http-proxy-middleware';
-import cors from 'cors';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const app = express();
-
-app.use(express.static(path.join(__dirname, 'public'), {
+app.use(express.static(join(__dirname, 'public'), {
     setHeaders: (res, filePath) => {
         if (filePath.endsWith('.js')) {
             res.setHeader('Content-Type', 'application/javascript');
@@ -23,7 +18,7 @@ app.use(cors());
 
 // Serve the index html file
 app.get('/public/index.html', function (req, res) {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(join(__dirname, 'public', 'index.html'));
 });
 
 app.use('/', createProxyMiddleware({

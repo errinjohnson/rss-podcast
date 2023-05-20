@@ -18,9 +18,9 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
-// Serve the popup.html file
-app.get('/public/popup.html', function (req, res) {
-    res.sendFile(path.join(__dirname, 'public', 'popup.html'));
+// Serve the index.html file
+app.get('/public/index.html', function (req, res) {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.use('/', createProxyMiddleware({

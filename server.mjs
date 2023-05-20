@@ -22,47 +22,44 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
 });
 
-app.use('/', createProxyMiddleware({
-    target: 'https://seahorse-app-ajw5j.ondigitalocean.app/', // default target
-    changeOrigin: true,
-    logLevel: 'debug',
-    onProxyReq(proxyReq, req, res) {
-        proxyReq.setHeader('Referer', req.url);
-    },
-    router: (req) => {
-        const targetUrl = req.query.url;
-        if (targetUrl) {
-            try {
-                new URL(targetUrl);
-                return targetUrl;
-            } catch (_) {
-                // not a valid URL
-                console.error(`Invalid URL provided: ${targetUrl}`);
-            }
+app.use('/', (req, res, next) => {
+    const targetUrl = req.query.url;
+    if (targetUrl) {
+        try {
+            new URL(targetUrl);
+            createProxyMiddleware({
+                target: targetUrl, 
+                changeOrigin: true,
+                logLevel: 'debug',
+                onProxyReq(proxyReq, req, res) {
+                    proxyReq.setHeader('Referer', req.url);
+                },
+                onError: (err, req, res) => {
+                    if (err && err.status) {
+                        console.error('Error in proxy middleware:', err);
+                        res.status(err.status).send('Internal Server Error');
+                    } else if (err) {
+                        console.error('Unknown error in proxy middleware:', err);
+                        res.status(500).send('Unknown Error');
+                    } else {
+                        res.status(500).send('Unknown Error');
+                    }
+                },
+                pathRewrite: (path, req) => {
+                    const url = new URL(targetUrl);
+                    return url.pathname + url.search + url.hash;
+                },
+            })(req, res, next);
+        } catch (_) {
+            // not a valid URL
+            console.error(`Invalid URL provided: ${targetUrl}`);
+            res.status(400).send('Invalid URL');
         }
-        // if no valid url is provided, fall back to the default target
-        return 'https://seahorse-app-ajw5j.ondigitalocean.app/';
-    },
-    onError: (err, req, res) => {
-        if (err && err.status) {
-            console.error('Error in proxy middleware:', err);
-            res.status(err.status).send('Internal Server Error');
-        } else if (err) {
-            console.error('Unknown error in proxy middleware:', err);
-            res.status(500).send('Unknown Error');
-        } else {
-            res.status(500).send('Unknown Error');
-        }
-    },
-    pathRewrite: (path, req) => {
-        const targetUrl = req.query.url;
-        if (!targetUrl) {
-            return path;
-        }
-        const url = new URL(targetUrl);
-        return url.pathname + url.search + url.hash;
-    },
-}));
+    } else {
+        // If no URL is provided, just send a 400 error.
+        res.status(400).send('No URL provided');
+    }
+});
 
 app.listen(port, () => {
     console.log(`Proxy server listening on port ${port}`);

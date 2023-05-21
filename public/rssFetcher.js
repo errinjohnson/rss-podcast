@@ -1,6 +1,4 @@
-import fetch from 'node-fetch';
 import cheerio from 'cheerio';
-
 
 export default class RssFetcher {
     constructor(proxyUrl) {

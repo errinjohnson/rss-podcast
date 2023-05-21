@@ -40,7 +40,12 @@ app.use('/', createProxyMiddleware({
     onProxyReq(proxyReq, req, res) {
         proxyReq.setHeader('Referer', req.url);
     },
-    onProxyRes(proxyRes, req, res) {
+    onProxyRes: (proxyRes, req, res) => {
+        // set cors headers in the response from the target server
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Custom-Header', 'anonymous');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
         const setCookie = proxyRes.headers['set-cookie'];
         if (setCookie) {
             const cookies = Array.isArray(setCookie) ? setCookie : [setCookie];

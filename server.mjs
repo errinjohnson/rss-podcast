@@ -26,6 +26,14 @@ app.get('/public/index.html', function (req, res) {
     res.sendFile(join(__dirname, 'public', 'index.html'));
 });
 
+app.use((req, res, next) => {
+    // Set CORS headers for every response
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
+
 app.use('/', createProxyMiddleware({
     changeOrigin: true,
     logLevel: 'debug',
@@ -33,12 +41,6 @@ app.use('/', createProxyMiddleware({
         proxyReq.setHeader('Referer', req.url);
     },
     onProxyRes(proxyRes, req, res) {
-        // set cors headers in the response from the target server
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Custom-Header', 'anonymous');
-        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
         const setCookie = proxyRes.headers['set-cookie'];
         if (setCookie) {
             const cookies = Array.isArray(setCookie) ? setCookie : [setCookie];
@@ -48,31 +50,28 @@ app.use('/', createProxyMiddleware({
         }
     },
     router: (req) => {
-    const targetUrl = req.query.url;
-    if (!targetUrl) {
-        return null;
-    }
-    // Here you can add additional checks to make sure targetUrl is a valid URL
-    try {
-        new URL(targetUrl);
-    } catch (_) {
-        return null;
-    }
-    return targetUrl;
-},
-pathRewrite: (path, req) => {
-    // Here, it is safe to assume that req.query.url is a valid URL
-    const url = new URL(req.query.url)
-    console.log(url);
-    return url.pathname + url.search;
-},
-
+        const targetUrl = req.query.url;
+        console.log('Target URL:', targetUrl); 
+        if (!targetUrl) {
+            return null;
+        }
+        try {
+            new URL(targetUrl);
+        } catch (_) {
+            return null;
+        }
+        return targetUrl;
+    },
     onError: (err, req, res) => {
-    console.error('Error in proxy middleware:', err);
-    res.status(500).send(`Internal Server Error: ${err.message}`);
-},
-
-   }));
+        console.error('Error in proxy middleware:', err);
+        res.status(500).send(`Internal Server Error: ${err.message}`);
+    },
+    pathRewrite: (path, req) => {
+        const url = new URL(req.query.url)
+        console.log(url);
+        return url.pathname + url.search;
+    },
+}));
 
 app.listen(port, () => {
     console.log(`Proxy server listening on port ${port}`);

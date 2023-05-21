@@ -48,23 +48,31 @@ app.use('/', createProxyMiddleware({
         }
     },
     router: (req) => {
-        const targetUrl = req.query.url;
-        if (!targetUrl) {
-            return null;
-        }
-        return targetUrl;
-    },
+    const targetUrl = req.query.url;
+    if (!targetUrl) {
+        return null;
+    }
+    // Here you can add additional checks to make sure targetUrl is a valid URL
+    try {
+        new URL(targetUrl);
+    } catch (_) {
+        return null;
+    }
+    return targetUrl;
+},
+pathRewrite: (path, req) => {
+    // Here, it is safe to assume that req.query.url is a valid URL
+    const url = new URL(req.query.url)
+    console.log(url);
+    return url.pathname + url.search;
+},
+
     onError: (err, req, res) => {
     console.error('Error in proxy middleware:', err);
     res.status(500).send(`Internal Server Error: ${err.message}`);
 },
 
-    pathRewrite: (path, req) => {
-    const url = new URL(req.query.url);
-    return url.pathname + url.search;
-},
-
-}));
+   }));
 
 app.listen(port, () => {
     console.log(`Proxy server listening on port ${port}`);

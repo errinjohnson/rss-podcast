@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PulsePortal</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="/0cb16b7c9d4358b6fa25da8a08bf5506.js" type="module"></script>
+    <!-- <script src="./rssFeedManager.js" type="module"></script> -->
+    <script src="/168726dbe96b3ce427e7fedce31bb0bc.js" type="module"></script>
+
+    <link rel="stylesheet" href="/bca1542f88ef8253c16b452e9ad09f98.css">
+</head>
+
+<body id="top">
+    <header></header>
+    <div class="container">
+        <div class="collapse" id="navbarToggleExternalContent">
+            <div class="p-4">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <button class="nav-link" id="show-instructions" type="button">Show
+                            Instructions</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="toggle-url-list" type="button">Show/Hide URL List
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="resetLocalStorage" type="button">
+                            Reset Local Storage
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#rssFeedModal">
+                            Backup List
+                        </button>
+                    </li>
+               </ul>
+            </div>
+        </div>
+        <nav class="navbar navbar-custom">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+        <div class="row">
+            <div id="instructions" style="display: none;">
+                <div class="col-md-12">
+                    <div class="row">
+                         <div class="col-md-4">
+                            <p>Welcome to our RSS News Reader app! Here's how you can use it:</p>
+                            <p><strong>Step 1:</strong> Enter the URL of an RSS feed in the input field. For example, you might use a URL like 'https://example.com/rss'.</p>
+                            <p><strong>Step 2:</strong> Click on the 'Submit' button. Our app will check if the URL is valid and if it can successfully fetch data from it.</p>
+                            <p><strong>Note:</strong> If the URL is already in your list or if it's not valid, the app will show an error message.</p>
+                        </div>
+                            <div class="col-md-4">
+                            <p><strong>Step 3:</strong> If the URL is valid, the app will add it to your list of RSS feed URLs. You can see this list by clicking on the 'Toggle URL List' button.</p>
+                            <p><strong>Step 4:</strong> In the URL list, you can see the source name and the URL of each feed. You can also remove any feed from the list by clicking on the 'Remove' button next to it.</p>
+                            <p><strong>Step 5:</strong> Click on the 'Fetch News' button to fetch news data from all the URLs in your list. The app will be displayed your news within the aspp</p>
+                        </div>
+                        <div class="col-md-4">
+                         <p><strong>Step 6:</strong> If there's an error while fetching news data from a URL, the app will show an error message, and it will remove the URL from your list.</p>
+                        <p><strong>Step 7:</strong> Our app uses local storage to save your RSS feed URLs. You can reset this storage by clicking on the 'Reset Local Storage' button. Be careful as this will remove all your stored URLs.</p>
+                        <p><strong>Step 8:</strong> There's a 'Backup' button available (separate local storge not affected by a reset) LocalStorage that will open a modal. This modal will let y ou view ,  add  and remove your URLs. 
+                        </p><p><strong>Step 9:</strong> In the Backup modal, there's also an option to share your URLs via email. Simply enter your email, click on the 'Share via Email' button, and we'll send you an email with your URLs.</p>
+                        <p>That's it! Enjoy reading news from your favorite sources.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div id="url-list" style="display: none;">
+                   <ul id="url-list-container" class="no-bullets"></ul>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+                <form id="rss-form" class="d-flex">
+                    <input id="rss-input" class="form-control me-2" type="text" placeholder="Add to URL List [enter rss URL]" aria-label="Add to URL List [enter rss URL]" required="">
+                    <input type="submit" id="rss-submit" name="submitButton" value="Submit" class="btn btn-primary">
+                </form>
+
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="rssFeedModal" tabindex="-1" aria-labelledby="rssFeedModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rssFeedModalLabel">Add RSS Feed URLs</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="rssFeedForm">
+                            <div class="mb-3">
+                                <label for="rssFeedUrls" class="form-label">Enter RSS Feed URLs (one per line)</label>
+                                <textarea class="form-control" id="rssFeedUrls" rows="5"></textarea>
+                            </div>
+                        </form>
+                        <!-- Container to display the list of URLs -->
+                        <div class="container mt-5">
+                            <h5>view and/or remove</h5>
+                            <ul id="rssFeedList" class="list-group"></ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveRssFeedUrls">Save URLs</button>
+                        <button type="button" class="btn btn-primary" id="shareByEmail">Share by Email</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <main>
+            <button id="fetch-news-button" class="btn btn-primary">Fetch All News</button>
+            <div id="news-buttons"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="news-container col-md-6">
+                        <div id="news-list"></div>
+                    </div>
+                    <div class="podcast-container col-md-6">
+                        <h4>Coming Soon | Podcast</h4>
+                        <div class="search-podcast">
+                            <form>
+                                <input type="text" id="podcast-search-input" placeholder="Search for podcasts" required="">
+                                <button id="podcast-search-button">Search</button>
+                            </form>
+                        </div>
+                        <div id="podcast-search-results" class="d-none"></div>
+                        <div id="podcast-list"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+
+</html>

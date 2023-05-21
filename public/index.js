@@ -3,102 +3,97 @@ import RssFetcher from './rssFetcher.js';
 const proxyServerUrl = 'https://seahorse-app-ajw5j.ondigitalocean.app/';
 const myRssFetcher = new RssFetcher(proxyServerUrl, DOMParser);
 
-// Create an instance of RssFetcher
-const rssFetcher = new RssFetcher();
 const rssSubmitButton = document.getElementById('rss-submit');
 const rssInput = document.getElementById('rss-input');
 
-
 rssSubmitButton.addEventListener('click', function () {
   const rssInputValue = rssInput.value;
-  if (rssInputValue == '')
-  {
+  if (rssInputValue == '') {
     return;
   }
-    const rssFeedUrls = JSON.parse(localStorage.getItem('rssFeedUrls')) || [];
-    const existingFeed = rssFeedUrls.find(feed => feed.url === rssInputValue);
-    if (existingFeed) {
-        console.log("URL already exists");
-        return;
-    }
-    let newsFeed = { url: rssInputValue };
-    rssFeedUrls.push(newsFeed);
-    localStorage.setItem('rssFeedUrls', JSON.stringify(rssFeedUrls));
+  
+  const rssFeedUrls = JSON.parse(localStorage.getItem('rssFeedUrls')) || [];
+  const existingFeed = rssFeedUrls.find(feed => feed.url === rssInputValue);
+  
+  if (existingFeed) {
+    console.log("URL already exists");
+    return;
+  }
+  
+  let newsFeed = { url: rssInputValue };
+  rssFeedUrls.push(newsFeed);
+  localStorage.setItem('rssFeedUrls', JSON.stringify(rssFeedUrls));
 
-    validateAndFetchNewsData(rssInputValue)
-        .then(newsData => {
-            newsFeed.sourceName = newsData.sourceName;
-            localStorage.setItem('rssFeedUrls', JSON.stringify(rssFeedUrls));
-            updateUrlList(newsFeed);
-        })
-        .catch(error => console.error('Error:', error));
+  validateAndFetchNewsData(rssInputValue)
+    .then(newsData => {
+      newsFeed.sourceName = newsData.sourceName;
+      localStorage.setItem('rssFeedUrls', JSON.stringify(rssFeedUrls));
+      updateUrlList(newsFeed);
+    })
+    .catch(error => console.error('Error:', error));
 });
 
-
 document.getElementById('fetch-news-button').addEventListener('click', async () => {
-    try {
-        await fetchAllNewsData();
-    } catch (error) {
-        console.error('Error fetching news:', error);
-    }
+  try {
+    await fetchAllNewsData();
+  } catch (error) {
+    console.error('Error fetching news:', error);
+  }
 });
 
 const showInstructionsButton = document.getElementById('show-instructions');
 const instructions = document.getElementById('instructions');
 
 showInstructionsButton.addEventListener('click', function() {
-    instructions.style.display = instructions.style.display === 'none' ? 'block' : 'none';
+  instructions.style.display = instructions.style.display === 'none' ? 'block' : 'none';
 });
 
 const toggleUrlListButton = document.getElementById('toggle-url-list');
 const urlListContainer = document.getElementById('url-list-container');
 
 toggleUrlListButton.addEventListener('click', function() {
-    urlListContainer.parentElement.style.display = urlListContainer.parentElement.style.display === 'none' ? 'block' : 'none';
+  urlListContainer.parentElement.style.display = urlListContainer.parentElement.style.display === 'none' ? 'block' : 'none';
 });
 
 function updateUrlList(newsFeed = {}) {
-    const sourceName = newsFeed.sourceName ? newsFeed.sourceName : newsFeed.url;
+  const sourceName = newsFeed.sourceName ? newsFeed.sourceName : newsFeed.url;
 
-    // Check if a list item for this newsFeed already exists
-    const existingListItem = Array.from(urlListContainer.children).find(
-        (child) => child.querySelector('span').textContent === sourceName
-    );
+  const existingListItem = Array.from(urlListContainer.children).find(
+    (child) => child.querySelector('span').textContent === sourceName
+  );
 
-    if (existingListItem) {
-        // If it exists, don't create a new one
-        console.log("List item for this URL already exists");
-        return;
+  if (existingListItem) {
+    console.log("List item for this URL already exists");
+    return;
+  }
+
+  const listItem = document.createElement('li');
+  const sourceNameSpan = document.createElement('span');
+  sourceNameSpan.textContent = sourceName;
+  listItem.appendChild(sourceNameSpan);
+
+  const removeButton = document.createElement('button');
+  removeButton.classList.add('btn-primary');
+  removeButton.textContent = 'Remove';
+  removeButton.addEventListener('click', function() {
+    const rssFeedUrls = JSON.parse(localStorage.getItem('rssFeedUrls')) || [];
+    const index = rssFeedUrls.findIndex(f => f.url === newsFeed.url);
+    if (index > -1) {
+      rssFeedUrls.splice(index, 1);
+      localStorage.setItem('rssFeedUrls', JSON.stringify(rssFeedUrls));
+      listItem.remove();
     }
+  });
 
-    // If it doesn't exist, create a new list item
-    const listItem = document.createElement('li');
-    const sourceNameSpan = document.createElement('span');
-    sourceNameSpan.textContent = sourceName;
-    listItem.appendChild(sourceNameSpan);
+  const titleOrUrlText = document.createTextNode(` (${newsFeed.title || newsFeed.url})`);
+  listItem.appendChild(titleOrUrlText);
 
-    const removeButton = document.createElement('button');
-    removeButton.classList.add('btn-primary');
-    removeButton.textContent = 'Remove';
-    removeButton.addEventListener('click', function() {
-        const rssFeedUrls = JSON.parse(localStorage.getItem('rssFeedUrls')) || [];
-        const index = rssFeedUrls.findIndex(f => f.url === newsFeed.url);
-        if (index > -1) {
-            rssFeedUrls.splice(index, 1);
-            localStorage.setItem('rssFeedUrls', JSON.stringify(rssFeedUrls));
-            listItem.remove();
-        }
-    });
-
-    const titleOrUrlText = document.createTextNode(` (${newsFeed.title || newsFeed.url})`);
-    listItem.appendChild(titleOrUrlText);
-
-    listItem.appendChild(removeButton);
-    urlListContainer.appendChild(listItem);
+  listItem.appendChild(removeButton);
+  urlListContainer.appendChild(listItem);
 }
 
 function handleFetchNewsError(feed, error) {
-    console.error(`Error fetching news data for URL: ${feed.url}. Error:`, error);
+  console.error(`Error fetching news data for URL: ${feed.url}. Error:`, error);
 }
 
 function fetchAllNewsData() {
@@ -198,7 +193,7 @@ resetLocalStorage.addEventListener("click", function () {
   }
 });
 async function validateAndFetchNewsData(url) {
-    if (!url){
+    if (!url ){
         throw new Error('Invalid or empty "url" query parameter, or not an RSS/XML feed URL.');
   }
   console.log("myRssFetcher.fetchNewsData(url)",fetchNewsData(url) );

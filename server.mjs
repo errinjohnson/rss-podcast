@@ -4,7 +4,7 @@ import cors from 'cors';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fetch from 'node-fetch';
-import cheerio from 'cheerio';
+import cheerio from './libs/cheerio';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -58,7 +58,11 @@ app.use('/', createProxyMiddleware({
         res.status(500).send(`Internal Server Error: ${err.message}`);
     },
     async onProxyRes(proxyRes, req, res) {
-        let originalBody = await proxyRes.text();
+    let originalBody = '';
+    proxyRes.on('data', (chunk) => {
+        originalBody += chunk;
+    });
+    proxyRes.on('end', () => {
         let $ = cheerio.load(originalBody, { xmlMode: true });
 
         const items = [];
@@ -78,7 +82,8 @@ app.use('/', createProxyMiddleware({
 
         // Override original response
         res.json(data);
-    }
+    });
+}
 }));
 
 app.listen(port, () => {

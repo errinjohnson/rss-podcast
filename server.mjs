@@ -57,13 +57,19 @@ app.use('/', createProxyMiddleware({
         console.error('Error in proxy middleware:', err);
         res.status(500).send(`Internal Server Error: ${err.message}`);
     },
-    async onProxyRes(proxyRes, req, res) {
+ async onProxyRes(proxyRes, req, res) {
+    proxyRes.on('error', (err) => {
+        console.error('Error in proxy middleware:', err);
+        res.status(500).send(`Internal Server Error: ${err.message}`);
+    });
+
     let originalBody = '';
     proxyRes.on('data', (chunk) => {
         originalBody += chunk;
     });
+
     proxyRes.on('end', () => {
-        let $ = cheerio.load(originalBody, { xmlMode: true });
+           let $ = cheerio.load(originalBody, { xmlMode: true });
 
         const items = [];
         $('item').each((index, element) => {

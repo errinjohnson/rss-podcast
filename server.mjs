@@ -4,7 +4,7 @@ import cors from 'cors';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fetch from 'node-fetch';
-import cheerio from './libs/cheerio';
+import cheerio from 'cheerio';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

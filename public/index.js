@@ -1,7 +1,8 @@
 import RssFetcher from './rssFetcher.js';
 
 const proxyServerUrl = 'https://seahorse-app-ajw5j.ondigitalocean.app/';
-const myRssFetcher = new RssFetcher(proxyServerUrl, DOMParser);
+const myRssFetcher = new RssFetcher(proxyServerUrl);
+
 
 const rssSubmitButton = document.getElementById('rss-submit');
 const rssInput = document.getElementById('rss-input');
@@ -196,7 +197,8 @@ async function validateAndFetchNewsData(url) {
     if (!url ){
         throw new Error('Invalid or empty "url" query parameter, or not an RSS/XML feed URL.');
   }
-  console.log("myRssFetcher.fetchNewsData(url)",fetchNewsData(url) );
+  console.log("myRssFetcher.fetchNewsData(url)", myRssFetcher.fetchNewsData(url));
+
     return myRssFetcher.fetchNewsData(url);
 }
 
@@ -214,159 +216,6 @@ document.getElementById('shareByEmail').addEventListener('click', function() {
     window.open(emailUrl);
 });
 
-
-// podcast script starts hre
-
-// Add event listener to the podcast search button
-const podcastSearchButton = document.getElementById('podcast-search-button');
-const podcastSearchInput = document.getElementById('podcast-search-input');
-const podcastSearchResults = document.getElementById('podcast-search-results');
-const podcastList = document.getElementById('podcast-list');
-
-podcastSearchButton.addEventListener('click', async (e) => {
-    e.preventDefault();
-
-    const searchTerm = podcastSearchInput.value.trim();
-    if (searchTerm === '') {
-        return;
-    }
-
-    try {
-        // Clear previous search results
-        podcastSearchResults.innerHTML = '';
-        podcastList.innerHTML = '';
-
-        // Perform podcast search
-        const podcasts = await searchPodcasts(searchTerm);
-
-        if (podcasts.length > 0) {
-            // Display search results
-            displayPodcastSearchResults(podcasts);
-        } else {
-            // Display "No results" message
-            displayNoResultsMessage();
-        }
-    } catch (error) {
-        console.error('Error searching podcasts:', error);
-    }
-});
-
-async function searchPodcasts(searchTerm) {
-  const term = encodeURIComponent(searchTerm); // URL-encode the search term
-  const country = 'US'; // Specify the country code, e.g., 'US' for the United States
-  const proxyUrl = 'https://squid-app-i75i8.ondigitalocean.app/';
-
-  const itunesUrl = `https://itunes.apple.com/search?term=${term}&country=${country}`;
-  const url = `${proxyUrl}?url=${encodeURIComponent(itunesUrl)}`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data.results && data.results.length > 0) {
-      // Process the search results
-      return data.results.map((result) => {
-        // Extract relevant information from the result
-        return {
-          title: result.trackName,
-          artist: result.artistName,
-          artwork: result.artworkUrl100,
-          feedUrl: result.feedUrl,
-          fullEpisodes: result.trackCount > 0
-        };
-      });
-    } else {
-      // No results found
-      return [];
-    }
-  } catch (error) {
-    console.error('Error searching podcasts:', error);
-    throw error;
-  }
-}
-function displayPodcastSearchResults(podcasts) {
-  // Display the search results in the podcast search results container
-  // You can customize this function to create HTML elements based on the podcast data
-  podcasts.forEach((podcast) => {
-    const resultItem = document.createElement('div');
-
-    // Create the podcast information
-    const title = document.createElement('h3');
-    title.textContent = podcast.title;
-    const artist = document.createElement('p');
-    artist.textContent = `Artist: ${podcast.artist}`;
-    const artwork = document.createElement('img');
-    artwork.src = podcast.artwork;
-
-    // Create the play button
-    const playButton = document.createElement('button');
-    playButton.textContent = 'Play';
-    playButton.addEventListener('click', () => {
-      playPodcast(podcast);
-    });
-
-    // Append elements to the result item
-    resultItem.appendChild(title);
-    resultItem.appendChild(artist);
-    resultItem.appendChild(artwork);
-    resultItem.appendChild(playButton);
-
-    playButton.addEventListener('click', () => {
-  playPodcast(podcast, rssFetcher);
-});
-
-    podcastSearchResults.appendChild(resultItem);
-  });
-
-  // Show the podcast search results container
-  podcastSearchResults.classList.remove('d-none');
-}
-function displayNoResultsMessage() {
-    // Display a "No results" message in the podcast search results container
-    const message = document.createElement('div');
-    message.textContent = 'No results found.';
-    podcastSearchResults.appendChild(message);
-
-    // Show the podcast search results container
-    podcastSearchResults.classList.remove('d-none');
-}
-// // Update the click event listener for the play button
-
-
-// Update the function name and parameters
-async function playPodcast(podcast, rssFetcher) {
-  // Update the UI to show the selected podcast
-  const podcastList = document.getElementById('podcast-list');
-  podcastList.innerHTML = '';
-
-  const podcastTitle = document.createElement('h2');
-  podcastTitle.textContent = podcast.title;
-  podcastList.appendChild(podcastTitle);
-
-  const podcastEpisodes = document.createElement('ul');
-  podcastList.appendChild(podcastEpisodes);
-
-  // Fetch the podcast feed and parse the episodes
-  const feedUrl = podcast.feedUrl;
-
-  try {
-    const podcastData = await rssFetcher.fetchData(feedUrl);
-    const parsedData = rssFetcher.parseData(podcastData);
-
-    parsedData.episodes.forEach((episode) => {
-      const episodeItem = document.createElement('li');
-      const episodeLinkElem = document.createElement('a');
-      episodeLinkElem.textContent = episode.title;
-      episodeLinkElem.href = episode.audioUrl;
-      episodeLinkElem.target = '_blank';
-      episodeItem.appendChild(episodeLinkElem);
-
-      podcastEpisodes.appendChild(episodeItem);
-    });
-  } catch (error) {
-    console.error('Error fetching podcast episodes:', error);
-  }
-}
 
 
 

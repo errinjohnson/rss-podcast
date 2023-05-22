@@ -18,27 +18,35 @@ export default class RssFetcher {
   }
 
   async fetchNewsData(url) {
-    if (!url || typeof url !== "string" || !url.trim().length) {
-      return;
-    }
-
-    const proxiedUrl = `${this.proxyServerUrl}?url=${encodeURIComponent(url)}`;
-    console.log('Fetching URL:', proxiedUrl);
-
-    try {
-      const response = await fetch(proxiedUrl);
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      return data;
-    } catch (error) {
-      console.error('Fetch error:', error);
-      throw error;
-    }
+  if (!url || typeof url !== "string" || !url.trim().length) {
+    return;
   }
+
+  const proxiedUrl = `${this.proxyServerUrl}?url=${encodeURIComponent(url)}`;
+  console.log('Fetching URL:', proxiedUrl);
+
+  try {
+    const response = await fetch(proxiedUrl);
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    if (!response.headers.get('Content-Type').includes('application/json')) {
+      throw new Error(`Received wrong Content-Type: ${response.headers.get('Content-Type')}`);
+    }
+
+    const responseText = await response.text();
+    console.log('Response text:', responseText);
+
+    const data = JSON.parse(responseText);
+
+    return data;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
+  }
+}
+
 
   async parseNewsData(data) {
     return data.items.map(item => {

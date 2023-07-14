@@ -12,7 +12,6 @@
   "author": "Errin Johnson",
   "license": "ISC",
   "dependencies": {
-    " ": "^1.0.0-rc.12",
     "axios": "^1.4.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",

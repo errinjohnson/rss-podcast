@@ -22,30 +22,33 @@ export default class RssFetcher {
   }
 
   async fetchNewsData(url) {
-    if (!url || typeof url !== "string" || !url.trim().length) {
-      return;
-    }
-
-    const proxiedUrl = `${this.proxyServerUrl}?url=${encodeURIComponent(url)}`;
-    console.log('Fetching URL:', proxiedUrl);
-
-    try {
-      const response = await axios.get(proxiedUrl);
-      if (response.status !== 200) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      const responseText = response.data;
-
-      // Parse XML to JavaScript Object
-      const data = await this.parser.parseStringPromise(responseText);
-
-      return data;
-    } catch (error) {
-      console.error('Fetch error:', error);
-      throw error;
-    }
+  if (!url || typeof url !== "string" || !url.trim().length) {
+    return;
   }
+
+  const proxiedUrl = `${this.proxyServerUrl}?url=${encodeURIComponent(url)}`;
+  console.log('Fetching URL:', proxiedUrl);
+
+  try {
+    const response = await axios.get(proxiedUrl);
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    const responseText = response.data;
+    console.log('Response text:', responseText);
+
+    // Parse XML to JavaScript Object
+    const data = parser.parse(responseText);
+    
+    return data;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
+  }
+}
+
 
   async parseNewsData(data) {
     return data.items.map(item => {

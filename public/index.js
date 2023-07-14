@@ -204,16 +204,7 @@ resetLocalStorage.addEventListener("click", function () {
     alert("The RSS Feed URLs have been reset.");
   }
 });
-async function validateAndFetchNewsData(url) {
-    if (!url ){
-        throw new Error('Invalid or empty "url" query parameter, or not an RSS/XML feed URL.');
-  }
-  const fetchedData = await myRssFetcher.fetchNewsData(url);
-  console.log("fetchedData", fetchedData);
-    return myRssFetcher.fetchNewsData(url);
-}
-
-document.getElementById('shareByEmail').addEventListener('click', function() {
+    document.getElementById('shareByEmail').addEventListener('click', function() {
     const urls = JSON.parse(localStorage.getItem('backupUrlList')) || [];
 
     if (urls.length === 0) {

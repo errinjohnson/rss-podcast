@@ -1,8 +1,10 @@
-import parser from 'fast-xml-parser';
+import axios from 'axios';
+import xml2js from 'xml2js';
 
 export default class RssFetcher {
   constructor(proxyUrl) {
     this.proxyServerUrl = proxyUrl;
+    this.parser = new xml2js.Parser();
   }
 
   isValidRssOrXmlUrl(url) {
@@ -28,17 +30,16 @@ export default class RssFetcher {
     console.log('Fetching URL:', proxiedUrl);
 
     try {
-      const response = await fetch(proxiedUrl);
-      if (!response.ok) {
+      const response = await axios.get(proxiedUrl);
+      if (response.status !== 200) {
         throw new Error(`Request failed with status ${response.status}`);
       }
 
-      const responseText = await response.text();
-      console.log('Response text:', responseText);
+      const responseText = response.data;
 
       // Parse XML to JavaScript Object
-      const data = parser.parse(responseText);
-    
+      const data = await this.parser.parseStringPromise(responseText);
+
       return data;
     } catch (error) {
       console.error('Fetch error:', error);

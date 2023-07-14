@@ -1,3 +1,5 @@
+import parser from 'fast-xml-parser';
+
 export default class RssFetcher {
   constructor(proxyUrl) {
     this.proxyServerUrl = proxyUrl;
@@ -18,35 +20,31 @@ export default class RssFetcher {
   }
 
   async fetchNewsData(url) {
-  if (!url || typeof url !== "string" || !url.trim().length) {
-    return;
-  }
-
-  const proxiedUrl = `${this.proxyServerUrl}?url=${encodeURIComponent(url)}`;
-  console.log('Fetching URL:', proxiedUrl);
-
-  try {
-    const response = await fetch(proxiedUrl);
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
+    if (!url || typeof url !== "string" || !url.trim().length) {
+      return;
     }
 
-    if (!response.headers.get('Content-Type').includes('application/json')) {
-      throw new Error(`Received wrong Content-Type: ${response.headers.get('Content-Type')}`);
+    const proxiedUrl = `${this.proxyServerUrl}?url=${encodeURIComponent(url)}`;
+    console.log('Fetching URL:', proxiedUrl);
+
+    try {
+      const response = await fetch(proxiedUrl);
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      const responseText = await response.text();
+      console.log('Response text:', responseText);
+
+      // Parse XML to JavaScript Object
+      const data = parser.parse(responseText);
+    
+      return data;
+    } catch (error) {
+      console.error('Fetch error:', error);
+      throw error;
     }
-
-    const responseText = await response.text();
-    console.log('Response text:', responseText);
-
-    const data = JSON.parse(responseText);
-
-    return data;
-  } catch (error) {
-    console.error('Fetch error:', error);
-    throw error;
   }
-}
-
 
   async parseNewsData(data) {
     return data.items.map(item => {

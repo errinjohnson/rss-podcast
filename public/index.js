@@ -33,6 +33,17 @@ rssSubmitButton.addEventListener('click', function () {
     })
     .catch(error => console.error('Error:', error));
 });
+async function validateAndFetchNewsData(url) {
+  if (!url){
+    throw new Error('Invalid or empty "url" query parameter, or not an RSS/XML feed URL.');
+  }
+
+  const fetchedData = await myRssFetcher.fetchNewsData(url);
+  console.log("fetchedData", fetchedData);
+
+  return fetchedData;
+}
+
 
 document.getElementById('fetch-news-button').addEventListener('click', async () => {
   try {
@@ -197,8 +208,8 @@ async function validateAndFetchNewsData(url) {
     if (!url ){
         throw new Error('Invalid or empty "url" query parameter, or not an RSS/XML feed URL.');
   }
-  console.log("myRssFetcher.fetchNewsData(url)", myRssFetcher.fetchNewsData(url));
-
+  const fetchedData = await myRssFetcher.fetchNewsData(url);
+  console.log("fetchedData", fetchedData);
     return myRssFetcher.fetchNewsData(url);
 }
 

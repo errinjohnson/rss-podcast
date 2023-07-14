@@ -1,6 +1,6 @@
-const express = require('express');
-const axios = require('axios'); // Used to fetch data from external URLs
-const cors = require('cors'); // To bypass CORS restrictions
+import express from 'express';
+import axios from 'axios'; 
+import cors from 'cors'; 
 
 const app = express();
 

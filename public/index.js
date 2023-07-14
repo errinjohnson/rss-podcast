@@ -1,6 +1,6 @@
 import RssFetcher from './rssFetcher.js';
 
-const proxyServerUrl = 'https://seahorse-app-ajw5j.ondigitalocean.app/';
+const proxyServerUrl = 'https://lobster-app-t2f8s.ondigitalocean.app/';
 const myRssFetcher = new RssFetcher(proxyServerUrl);
 
 
